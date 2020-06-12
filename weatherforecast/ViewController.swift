@@ -65,7 +65,6 @@ class ViewController: UIViewController, FSPagerViewDataSource, DrawerLocationDel
         AF.request(WEATHER_API_URL+"data/2.5/weather", parameters: parameters ).responseJSON { (response) in
             switch(response.result){
             case .success(let jsonResponse):
-                print("jsonResponse:\(jsonResponse)")
                 if let json = jsonResponse as? [String:Any]{
                     let model = WeatherModel(JSON: json)
                     
@@ -113,8 +112,38 @@ class ViewController: UIViewController, FSPagerViewDataSource, DrawerLocationDel
         if(CLLocationManager.authorizationStatus() == .authorizedWhenInUse ||
         CLLocationManager.authorizationStatus() == .authorizedAlways) {
            currentLoc = locationManager.location
-           print(currentLoc.coordinate.latitude)
-           print(currentLoc.coordinate.longitude)
+            let parameters = ["lat": currentLoc.coordinate.latitude, "APPID": API_KEY, "lon": currentLoc.coordinate.longitude] as [String : Any]
+            AF.request(WEATHER_API_URL+"data/2.5/weather", parameters: parameters ).responseJSON { (response) in
+                switch(response.result){
+                case .success(let jsonResponse):
+                    if let json = jsonResponse as? [String:Any]{
+                        let model = WeatherModel(JSON: json)
+                        
+                        self.topTemp.text = String.init(format: "%.1f", (model?.main.temp ?? 0.0) - 273.15)
+                        self.topFeelLike.text = String.init(format: "Feels Like %.1f", model?.main.feels_like ?? 0.0)
+                        
+                        self.leftMinTemp.text = String.init(format: "Min %.1f°C", (model?.main.temp_min ?? 0.0) - 273.15)
+                        self.leftHumidity.text = String.init(format: "%d%%", model?.main.humidity ?? 0.0)
+                        
+                        self.rightMaxTemp.text = String.init(format: "Max %.1f°C", (model?.main.temp_max ?? 0.0) - 273.15)
+                        self.rightPressure.text = String.init(format: "%d hPa", model?.main.pressure ?? 0)
+                        
+                        self.bottomCloud.text = model?.weather[0].main
+                        self.bottomWind.text = String.init(format: "Wind %.1f m/s", model?.wind.speed ?? 0.0)
+                        let df = DateFormatter()
+                        df.dateFormat = "MMM dd"
+                        let df2 = DateFormatter()
+                        df2.dateFormat = "h:mm a"
+                        self.bottomDate.text = df.string(from: Date())
+                        self.bottomTime.text = df2.string(from: Date())
+                        let url = URL(string: WEATHER_ICON_URL+(model?.weather[0].icon ?? "")+"@2x.png")
+                        self.centerCloudImage.kf.setImage(with: url)
+                        self.title = "My Location"
+                    }
+                case .failure(let err):
+                    print("err:\(err)")
+                }
+            }
         }
     }
     
