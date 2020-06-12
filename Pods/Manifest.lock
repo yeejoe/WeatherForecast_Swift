@@ -1,0 +1,30 @@
+PODS:
+  - Alamofire (5.2.1)
+  - FSPagerView (0.8.3)
+  - Kingfisher (5.14.0):
+    - Kingfisher/Core (= 5.14.0)
+  - Kingfisher/Core (5.14.0)
+  - ObjectMapper (4.2.0)
+
+DEPENDENCIES:
+  - Alamofire (~> 5.2)
+  - FSPagerView
+  - Kingfisher (~> 5.0)
+  - ObjectMapper (~> 4.2)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - FSPagerView
+    - Kingfisher
+    - ObjectMapper
+
+SPEC CHECKSUMS:
+  Alamofire: e911732990610fe89af59ac0077f923d72dc3dfd
+  FSPagerView: 670405b2f18e2a87fa37f20b00de783e562c25a8
+  Kingfisher: 7b64389a43139c903ec434788344c288217c792d
+  ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
+
+PODFILE CHECKSUM: c48150a4e9427a442dcdbc14355177c870476ad2
+
+COCOAPODS: 1.7.5
